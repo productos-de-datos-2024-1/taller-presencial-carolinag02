@@ -1,3 +1,5 @@
+"""Web application to deploy the model"""
+
 import json
 import logging
 import os.path
@@ -5,6 +7,10 @@ import os.path
 import pkg_resources
 import requests
 from flask import Flask, render_template, request
+
+# -----------------------------------------------------------------------------
+# Logging
+# -----------------------------------------------------------------------------
 
 CONFIG_FILE = "config.json"
 
@@ -36,6 +42,10 @@ def index():
 
     if request.method == "POST":
 
+        # ---------------------------------------------------------------------
+        # Get the user values
+        # ---------------------------------------------------------------------
+
         user_values = {}
 
         user_values["bedrooms"] = float(request.form["bedrooms"])
@@ -60,7 +70,12 @@ def index():
         else:
             user_values["condition"] = 5
 
+        logging.info("-" * 40)
         logging.info("User values: %s", user_values)
+
+        # ---------------------------------------------------------------------
+        # Get the prediction
+        # ---------------------------------------------------------------------
 
         url = config["api_server_url"]
         response = requests.post(url, json=user_values, timeout=5)
@@ -76,5 +91,5 @@ def index():
 
 if __name__ == "__main__":
     logging.info("Starting the application")
-    app.run(debug=True, port=5002)
-    logging.info("Starting the application")
+    app.run(debug=True, port=5000, host="0.0.0.0")
+    logging.info("Finishing the application")

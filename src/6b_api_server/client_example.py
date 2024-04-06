@@ -1,7 +1,3 @@
-#
-# Usage from command line:
-#
-#
 import requests
 
 

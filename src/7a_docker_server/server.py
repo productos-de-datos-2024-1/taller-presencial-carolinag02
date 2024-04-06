@@ -1,5 +1,3 @@
-"""Docker API server."""
-
 import json
 import logging
 import os.path
@@ -16,10 +14,10 @@ from flask import Flask, request
 
 CONFIG_FILE = "config.json"
 
-if not pkg_resources.resource_exists(_name_, CONFIG_FILE):
+if not pkg_resources.resource_exists(__name__, CONFIG_FILE):
     raise FileNotFoundError(f"File {CONFIG_FILE} not found")
 
-with pkg_resources.resource_stream(_name_, CONFIG_FILE) as f:
+with pkg_resources.resource_stream(__name__, CONFIG_FILE) as f:
     config = json.load(f)
 
 logging.basicConfig(
@@ -33,7 +31,7 @@ logging.basicConfig(
 # API Server
 # -----------------------------------------------------------------------------
 
-app = Flask(_name_)
+app = Flask(__name__)
 app.config["SECRET_KEY"] = "api-server-secret-key"
 
 # Model features used for prediction
@@ -70,7 +68,7 @@ def index():
     return str(prediction[0])
 
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     logging.info("Starting API server")
     app.run(debug=True, port=5000, host="0.0.0.0")
-    logging.info("Finishing API server")
+    logging.info("Finishing API server")
